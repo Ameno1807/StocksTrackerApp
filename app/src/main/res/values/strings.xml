@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">StocksTracker</string>
+    <string name="Search">Find company or ticker</string>
+    <string name="company_title">YNDX</string>
+    <string name="full_title_company">Yandex, LLC</string>
+    <string name="stock_value">4 764,6 ₽</string>
+    <string name="day_delta">+55 ₽ (1,15%)</string>
+    <string name="popular_requests">Popular requests</string>
+    <string name="search_requests">You\'ve searched for this</string>
+    <string name="stocks">Stocks</string>
+    <string name="error_network_failed">Check you network connection</string>
+    <string name="stocks_text">Stocks</string>
+    <string name="favourite_text">Favourite</string>
+</resources>
