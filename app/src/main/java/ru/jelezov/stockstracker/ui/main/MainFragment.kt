@@ -7,14 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT
 import ru.jelezov.stockstracker.R
 import ru.jelezov.stockstracker.databinding.FragmentMainBinding
-import ru.jelezov.stockstracker.databinding.FragmentStocksListBinding
-import ru.jelezov.stockstracker.ui.stock.viewModel.FragmentStocksListViewModel
 import ru.jelezov.stockstracker.ui.viewPager.ViewPagerAdapter
 
 class MainFragment: Fragment() {
@@ -31,7 +28,7 @@ class MainFragment: Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -52,7 +49,7 @@ class MainFragment: Fragment() {
 
     private fun initTabs() {
         //add adapter for view pager
-        mainTabsViewPager.adapter = ViewPagerAdapter(childFragmentManager, lifecycle)
+        mainTabsViewPager.adapter = ViewPagerAdapter(this)
         mainTabsViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)

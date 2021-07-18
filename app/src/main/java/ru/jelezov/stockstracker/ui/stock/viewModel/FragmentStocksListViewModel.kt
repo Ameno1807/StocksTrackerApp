@@ -16,6 +16,7 @@ class FragmentStocksListViewModel @Inject constructor(
     ) : ViewModel() {
 
     val stocks: MutableLiveData<List<StocksData>> = MutableLiveData()
+    val favouriteStocks: MutableLiveData<List<StocksData>> = MutableLiveData()
 
     fun loadStocks() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -25,7 +26,7 @@ class FragmentStocksListViewModel @Inject constructor(
 
     fun loadFavouritesList() {
         viewModelScope.launch(Dispatchers.IO) {
-            stocks.postValue(repository.loadFavouritesList())
+            favouriteStocks.postValue(repository.loadFavouritesList())
         }
     }
 

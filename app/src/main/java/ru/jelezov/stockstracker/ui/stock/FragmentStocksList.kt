@@ -9,7 +9,6 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import ru.jelezov.stockstracker.databinding.FragmentStocksListBinding
-import ru.jelezov.stockstracker.model.StocksData
 import ru.jelezov.stockstracker.ui.stock.viewModel.FragmentStocksListViewModel
 
 @AndroidEntryPoint
@@ -23,7 +22,7 @@ class FragmentStocksList: Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentStocksListBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -48,12 +47,8 @@ class FragmentStocksList: Fragment() {
 
     private fun loadDataToAdapter(adapter: AdapterFragmentStocksList) {
         viewModel.stocks.observe(viewLifecycleOwner, { stocks ->
-            adapter.setData(stocks)
+            adapter.submitList(stocks)
         })
-        binding.swipeRefreshLayout.setOnRefreshListener {
-            viewModel.loadStocks()
-            binding.swipeRefreshLayout.isRefreshing = false
-        }
     }
 
 }

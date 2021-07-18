@@ -1,13 +1,11 @@
 package ru.jelezov.stockstracker.ui.stock
 
+import android.annotation.SuppressLint
 import android.graphics.Color
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
-import androidx.annotation.NonNull
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -16,17 +14,16 @@ import ru.jelezov.stockstracker.R
 import ru.jelezov.stockstracker.databinding.ViewItemStockBinding
 import ru.jelezov.stockstracker.model.StocksData
 import ru.jelezov.stockstracker.ui.stock.viewModel.FragmentStocksListViewModel
-import ru.jelezov.stockstracker.utils.MyDiffUtil
 import java.text.DecimalFormat
 
 
 open class AdapterFragmentStocksList(
    private val viewModel: FragmentStocksListViewModel
-) : RecyclerView.Adapter<AdapterFragmentStocksList.ViewHolder>() {
+) : ListAdapter<StocksData, AdapterFragmentStocksList.ViewHolder>(DiffCallback()) {
 
-    private var oldStocksList = emptyList<StocksData>()
 
     inner class ViewHolder(private val binding: ViewItemStockBinding) : RecyclerView.ViewHolder(binding.root) {
+        @SuppressLint("SetTextI18n")
         fun bind(item: StocksData) {
             binding.companyName.text = item.nameCompany
             binding.fullCompanyName.text = item.fullNameCompany
@@ -39,7 +36,7 @@ open class AdapterFragmentStocksList(
             updateFavorite(item.isFavourite)
 
         }
-        fun updateFavorite(isFavorite: Boolean) {
+        private fun updateFavorite(isFavorite: Boolean) {
             val starIcon = if (isFavorite) R.drawable.star_add else R.drawable.star
             val starImageDrawable = ResourcesCompat
                 .getDrawable(itemView.resources, starIcon, itemView.context.theme)
@@ -47,9 +44,6 @@ open class AdapterFragmentStocksList(
         }
     }
 
-    override fun getItemCount(): Int {
-        return oldStocksList.size
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(
         ViewItemStockBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -57,27 +51,24 @@ open class AdapterFragmentStocksList(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if ((position%2)==0) {
-            val item = oldStocksList[position]
+            val item = getItem(position)
             holder.bind(item)
         } else {
             holder.itemView.findViewById<View>(R.id.view).setBackgroundColor(Color.WHITE)
-            val item = oldStocksList[position]
+            val item = getItem(position)
             holder.bind(item)
         }
 
-        holder.itemView.findViewById<ImageView>(R.id.liked).setOnClickListener { button ->
-            val item = oldStocksList[position]
+        holder.itemView.findViewById<ImageView>(R.id.liked).setOnClickListener {
+            val item = getItem(position)
             if (item.isFavourite) {
                 item.isFavourite = false
-                //  button.setBackgroundResource(R.drawable.star)
                 holder.bind(item)
             } else {
                 item.isFavourite = true
-                // button.setBackgroundResource(R.drawable.star_add)
                 holder.bind(item)
             }
             afterLikeClick(item)
-
         }
     }
 
@@ -85,11 +76,16 @@ open class AdapterFragmentStocksList(
         viewModel.updateFavorite(currentItem)
     }
 
-     fun setData(newList: List<StocksData>) {
-        val diffUtil = MyDiffUtil(oldStocksList, newList)
-        val diffUtilResult = DiffUtil.calculateDiff(diffUtil)
-        oldStocksList = newList
-        diffUtilResult.dispatchUpdatesTo(this)
+    class DiffCallback : DiffUtil.ItemCallback<StocksData>() {
+        override fun areItemsTheSame(oldItem: StocksData, newItem: StocksData): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: StocksData, newItem: StocksData): Boolean {
+            return oldItem.id == newItem.id
+        }
     }
+
+
 
 }
