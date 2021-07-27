@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT
@@ -49,7 +50,8 @@ class MainFragment: Fragment() {
 
     private fun initTabs() {
         //add adapter for view pager
-        mainTabsViewPager.adapter = ViewPagerAdapter(this)
+        val adapter = ViewPagerAdapter(childFragmentManager, lifecycle)
+        mainTabsViewPager.adapter = adapter
         mainTabsViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
@@ -63,7 +65,6 @@ class MainFragment: Fragment() {
 
                         mainFavouriteTabText.setTextColor(Color.GRAY)
                         mainFavouriteTabText.textSize = 20f
-
                     }
                     //when favourite tab in focus
                     else ->{
@@ -78,8 +79,6 @@ class MainFragment: Fragment() {
                 }
             }
         })
-
-
 
         mainStocksTabText.setOnClickListener {
             mainTabsViewPager.currentItem = 0
