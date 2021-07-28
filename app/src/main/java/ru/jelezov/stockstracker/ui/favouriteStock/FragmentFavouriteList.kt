@@ -14,19 +14,16 @@ import ru.jelezov.stockstracker.databinding.FragmentFavouriteStocksBinding
 import ru.jelezov.stockstracker.model.StocksData
 import ru.jelezov.stockstracker.ui.main.MainFragment
 import ru.jelezov.stockstracker.ui.stock.AdapterFragmentStocksList
+import ru.jelezov.stockstracker.ui.stock.StocksListener
 import ru.jelezov.stockstracker.ui.stock.viewModel.FragmentStocksListViewModel
 import ru.jelezov.stockstracker.ui.viewPager.ViewPagerAdapter
 
 @AndroidEntryPoint
-class FragmentFavouriteList: Fragment() {
+class FragmentFavouriteList: Fragment(), StocksListener {
 
     private val viewModel: FragmentStocksListViewModel by viewModels()
     private var _binding: FragmentFavouriteStocksBinding? = null
     private val binding get() = _binding!!
-
-    private val onStarClick: (stock: StocksData) -> Unit =  { stock ->
-        viewModel.updateFavorite(stock)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,7 +37,6 @@ class FragmentFavouriteList: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.loadFavouritesList()
 
         binding.swipeRefreshFavouriteLayout.setOnRefreshListener {
             binding.swipeRefreshFavouriteLayout.isRefreshing = false
@@ -49,13 +45,22 @@ class FragmentFavouriteList: Fragment() {
 
         binding.recyclerFavouriteStocks.apply {
             this.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
-            val adapter = AdapterFragmentStocksList(onStarClick)
+            val adapter = AdapterFragmentStocksList(this@FragmentFavouriteList)
             viewModel.stocks.observe(viewLifecycleOwner, { stocks ->
-                adapter.submitList(stocks)
-                adapter.notifyDataSetChanged()
-                Log.e("Tag", "$stocks")
+                adapter.addStocks(stocks)
+                Log.e("Tag", "Stocks -> ${stocks}")
             })
+            Log.e("Tag", "StocksViewModel -> ${viewModel.stocks}")
             this.adapter = adapter
         }
+    }
+
+    override fun click(stocksData: StocksData) {
+        viewModel.updateFavorite(stocksData.copy(isFavourite = !stocksData.isFavourite))
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadFavouritesList()
     }
 }

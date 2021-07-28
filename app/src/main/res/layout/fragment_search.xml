@@ -23,22 +23,25 @@
             app:layout_constraintGuide_end="16dp" />
 
 
-        <EditText
+        <androidx.appcompat.widget.SearchView
             android:id="@+id/field_search"
+            android:theme="@style/Widget.AppCompat.Light.SearchView.MySearchView"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginTop="20dp"
+            android:paddingStart="38dp"
             android:background="@drawable/search_input_style"
-            android:hint="@string/Search"
-            android:paddingStart="55dp"
-            android:textColor="@color/black"
-            android:textColorHint="@color/black"
-            android:textSize="14sp"
+            app:queryHint="@string/Search"
+            app:iconifiedByDefault="false"
+            app:closeIcon="@drawable/clean"
+            app:queryBackground="@null"
+            app:searchHintIcon="@null"
+            app:searchIcon="@null"
             app:layout_constraintEnd_toStartOf="@+id/root_end_guideline"
             app:layout_constraintStart_toStartOf="@id/root_start_guideline"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_goneMarginTop="5dp" />
-
+            android:paddingLeft="38dp"
+            tools:ignore="RtlSymmetry" />
 
         <ImageView
             android:id="@+id/image_back"
@@ -50,33 +53,25 @@
             app:layout_constraintEnd_toEndOf="@+id/field_search"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/root_start_guideline"
-            app:layout_constraintTop_toTopOf="@+id/field_search" />
-
-        <ImageView
-            android:id="@+id/image_clean"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginEnd="20dp"
-            android:src="@drawable/clean"
-            app:layout_constraintBottom_toBottomOf="@+id/field_search"
-            app:layout_constraintEnd_toStartOf="@+id/root_end_guideline"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/image_back"
-            app:layout_constraintTop_toTopOf="@+id/field_search" />
+            app:layout_constraintTop_toTopOf="@+id/field_search"
+            tools:ignore="RtlCompat"
+            android:contentDescription="@string/back" />
 
 
         <TextView
             android:id="@+id/popular_requests"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/popular_requests"
-            android:textSize="18sp"
-            android:textColor="@color/black"
-            android:textStyle="bold"
             android:layout_marginTop="32dp"
+            android:text="@string/popular_requests"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/root_end_guideline"
             app:layout_constraintStart_toStartOf="@id/root_start_guideline"
-            app:layout_constraintTop_toBottomOf="@+id/field_search" />
+            app:layout_constraintTop_toBottomOf="@+id/field_search"
+            tools:visibility="visible" />
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/popular_requests_recycler"
@@ -88,14 +83,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/popular_requests" />
 
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/stocks_recycler"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="11dp"
+            android:layout_marginTop="26dp"
             app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/popular_requests_recycler" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

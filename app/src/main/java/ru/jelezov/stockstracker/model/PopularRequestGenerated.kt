@@ -10,13 +10,13 @@ object PopularRequestGenerated {
             "Advanced Micro Devices, Inc."
         ),
         CompanyBrief(
-            "Amazon.com"
+            "Amazon.com, Inc."
         ),
         CompanyBrief(
-            "Alphabet Inc A"
+            "Alphabet Inc."
         ),
         CompanyBrief(
-            "Tesla, Inc"
+            "Tesla, Inc."
         ),
         CompanyBrief(
             "Bank of America Corporation"

@@ -7,10 +7,10 @@ import androidx.room.PrimaryKey
 data class StocksData (
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    var nameCompany: String,
+    val nameCompany: String,
     val fullNameCompany: String,
     val currentPrice: String,
     val dayDelta: String,
     val percentDayDelta: String,
-    var isFavourite: Boolean = false
+    val isFavourite: Boolean = false
 )

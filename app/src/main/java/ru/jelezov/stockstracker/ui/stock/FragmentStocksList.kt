@@ -12,18 +12,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import ru.jelezov.stockstracker.databinding.FragmentStocksListBinding
 import ru.jelezov.stockstracker.model.StocksData
 import ru.jelezov.stockstracker.ui.stock.viewModel.FragmentStocksListViewModel
-import ru.jelezov.stockstracker.ui.viewPager.ViewPagerAdapter
 
 @AndroidEntryPoint
-class FragmentStocksList: Fragment() {
+class FragmentStocksList: Fragment(), StocksListener {
 
     private val viewModel: FragmentStocksListViewModel by viewModels()
     private var _binding: FragmentStocksListBinding? = null
     private val binding get() = _binding!!
 
-    private val onStarClick: (stock: StocksData) -> Unit =  { stock ->
-        viewModel.updateFavorite(stock)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,14 +41,24 @@ class FragmentStocksList: Fragment() {
 
         binding.recyclerStocks.apply {
             this.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
-            val adapter = AdapterFragmentStocksList(onStarClick)
+            val adapter = AdapterFragmentStocksList(this@FragmentStocksList)
             viewModel.stocks.observe(viewLifecycleOwner, { stocks ->
-                adapter.submitList(stocks)
-                Log.e("Tag", "$stocks")
+                adapter.addStocks(stocks)
+                Log.e("Tag", "Stocks -> ${stocks}")
             })
+            Log.e("Tag", "StocksViewModel -> ${viewModel.stocks}")
 
             this.adapter = adapter
         }
+    }
+
+    override fun click(stocksData: StocksData) {
+        viewModel.updateFavorite(stocksData.copy(isFavourite = !stocksData.isFavourite))
+    }
+
+   override fun onResume() {
+        super.onResume()
+        viewModel.loadStocks()
     }
 
 }

@@ -1,6 +1,7 @@
 package ru.jelezov.stockstracker.data.locale.room
 
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 import ru.jelezov.stockstracker.model.StocksData
 
 
@@ -18,6 +19,9 @@ interface StocksDao {
 
     @Update
     suspend fun update(stock: StocksData)
+
+    @Query("select * from stocks_table where nameCompany like :query or fullNameCompany like :query")
+    fun searchStocks(query: String): List<StocksData>
 
 
 }

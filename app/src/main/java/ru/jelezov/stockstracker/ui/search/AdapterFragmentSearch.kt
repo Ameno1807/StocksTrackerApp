@@ -1,4 +1,4 @@
-package ru.jelezov.stockstracker.ui.stock
+package ru.jelezov.stockstracker.ui.search
 
 import android.annotation.SuppressLint
 import android.graphics.Color
@@ -10,15 +10,15 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.jelezov.stockstracker.R
 import ru.jelezov.stockstracker.databinding.ViewItemStockBinding
 import ru.jelezov.stockstracker.model.StocksData
+import ru.jelezov.stockstracker.ui.stock.StocksListener
 import java.text.DecimalFormat
 
+open class AdapterFragmentSearch(
+    private val listener: StocksListener
+) : RecyclerView.Adapter<AdapterFragmentSearch.ViewHolder>() {
 
-open class AdapterFragmentStocksList(
-   private val listener: StocksListener
-) : RecyclerView.Adapter<AdapterFragmentStocksList.ViewHolder>() {
-
-    var stocksData: List<StocksData> = ArrayList()
-    var list: MutableList<StocksData> = ArrayList()
+    var stocksData = emptyList<StocksData>()
+    var newStocksData = emptyList<StocksData>().toMutableList()
 
     override fun getItemCount(): Int {
         return stocksData.size
@@ -45,18 +45,20 @@ open class AdapterFragmentStocksList(
 
             setFavouriteImageResource(binding.liked, item.isFavourite)
 
-            binding.liked.setOnClickListener {
-                listener.click(item)
-                setFavouriteImageResource(binding.liked, item.isFavourite)
-                val index = stocksData.indexOfFirst { it.id == item.id }
-                val updateStocks = stocksData[index].copy(isFavourite = !item.isFavourite)
-                list = stocksData.toMutableList()
-                list[index] = updateStocks
-                stocksData = list
-                notifyDataSetChanged()
-
+              binding.liked.setOnClickListener {
+                  listener.click(item)
+                  setFavouriteImageResource(binding.liked, item.isFavourite)
+                  val index = stocksData.indexOfFirst { it.id == item.id }
+                  val updateStocks = stocksData[index].copy(isFavourite = !item.isFavourite)
+                  newStocksData = stocksData.toMutableList()
+                  newStocksData[index] = updateStocks
+                  stocksData = newStocksData
+                  notifyDataSetChanged()
+                  Log.e("Tag", "$newStocksData")
             }
+
         }
+
     }
 
     private fun setFavouriteImageResource(favouriteImage: ImageView, favourite: Boolean) {
@@ -75,8 +77,8 @@ open class AdapterFragmentStocksList(
 
     fun addStocks(stocks: List<StocksData>) {
         this.stocksData = stocks
-        Log.e("Tag", "List -> $list")
         notifyDataSetChanged()
     }
 
 }
+
