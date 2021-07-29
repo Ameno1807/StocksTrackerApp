@@ -13,4 +13,4 @@
 - LiveData
 - Lifecycle
 
-!<img alt="quiz app" src="stocks.gif" width="250" height="500" />
+!<img alt="stocksTracker app" src="stocks.gif" width="250" height="500" />
