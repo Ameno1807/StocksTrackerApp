@@ -11,9 +11,6 @@ interface StocksDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertStocks(stocks: List<StocksData>)
 
-    @Query("SELECT * FROM stocks_table WHERE isFavourite = 1 ORDER BY id ASC")
-    fun readAllFavouriteList(): List<StocksData>
-
     @Query("SELECT * FROM stocks_table ORDER BY id ASC")
     fun readAllStocks(): List<StocksData>
 
@@ -23,5 +20,7 @@ interface StocksDao {
     @Query("select * from stocks_table where nameCompany like :query or fullNameCompany like :query")
     fun searchStocks(query: String): List<StocksData>
 
+    @Query("SELECT * FROM stocks_table WHERE isFavourite = 1 ORDER BY id ASC")
+    fun readAllFavouriteList(): Flow<List<StocksData>>
 
 }

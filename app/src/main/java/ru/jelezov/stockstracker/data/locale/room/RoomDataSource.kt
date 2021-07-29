@@ -8,11 +8,6 @@ import javax.inject.Inject
 
 class RoomDataSource @Inject constructor(private val db: StocksDataBase): LocalDataSource {
 
-    override suspend fun loadFavouriteStocks(): List<StocksData> {
-        return db.stocksDao().readAllFavouriteList()
-
-    }
-
     override suspend fun loadStocks(): List<StocksData> {
         return db.stocksDao().readAllStocks()
     }
@@ -38,6 +33,10 @@ class RoomDataSource @Inject constructor(private val db: StocksDataBase): LocalD
 
     override suspend fun searchStocks(query: String): List<StocksData>  {
        return db.stocksDao().searchStocks(query)
+    }
+
+    override fun readAllFavourite(): Flow<List<StocksData>> {
+        return db.stocksDao().readAllFavouriteList()
     }
 
 

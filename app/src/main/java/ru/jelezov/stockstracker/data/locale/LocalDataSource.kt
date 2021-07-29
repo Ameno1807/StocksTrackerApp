@@ -5,9 +5,9 @@ import ru.jelezov.stockstracker.model.StocksData
 
 
 interface LocalDataSource {
-    suspend fun loadStocks(): List<StocksData>
     fun insertStocks(stocksFromNetwork: List<StocksData>)
-    suspend fun loadFavouriteStocks(): List<StocksData>
+    suspend fun loadStocks(): List<StocksData>
     suspend fun updateStocks(stocks: StocksData)
     suspend fun searchStocks(query: String): List<StocksData>
+    fun readAllFavourite(): Flow<List<StocksData>>
 }

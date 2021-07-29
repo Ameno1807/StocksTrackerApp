@@ -29,15 +29,6 @@ class Repository @Inject constructor(
         }
     }
 
-    suspend fun loadFavouritesList(): List<StocksData> {
-        return try {
-            val stocksDB = localDataSource.loadFavouriteStocks()
-            stocksDB
-        } finally {
-            Log.e("Tag", "Error -> Repository(loadFavouritesList)")
-        }
-    }
-
    suspend fun updateFavorite(stock: StocksData) {
        return localDataSource.updateStocks(stock)
    }
@@ -51,5 +42,8 @@ class Repository @Inject constructor(
         }
     }
 
+    fun readAllFavourite(): Flow<List<StocksData>> {
+        return localDataSource.readAllFavourite()
+    }
 
 }

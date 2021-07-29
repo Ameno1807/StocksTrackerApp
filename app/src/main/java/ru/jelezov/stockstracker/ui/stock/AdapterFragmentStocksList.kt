@@ -6,10 +6,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ru.jelezov.stockstracker.R
 import ru.jelezov.stockstracker.databinding.ViewItemStockBinding
 import ru.jelezov.stockstracker.model.StocksData
+import ru.jelezov.stockstracker.utils.StocksDiffCallback
 import java.text.DecimalFormat
 
 
@@ -17,11 +19,17 @@ open class AdapterFragmentStocksList(
    private val listener: StocksListener
 ) : RecyclerView.Adapter<AdapterFragmentStocksList.ViewHolder>() {
 
-    var stocksData: List<StocksData> = ArrayList()
-    var list: MutableList<StocksData> = ArrayList()
+    var oldStocksData: List<StocksData> = ArrayList()
+    set(value) {
+        val diffUtil = StocksDiffCallback(field, value)
+        val diffResult = DiffUtil.calculateDiff(diffUtil)
+        field = value
+        diffResult.dispatchUpdatesTo(this@AdapterFragmentStocksList)
+    }
+    var newStocksData: MutableList<StocksData> = ArrayList()
 
     override fun getItemCount(): Int {
-        return stocksData.size
+        return oldStocksData.size
     }
 
     inner class ViewHolder(private val binding: ViewItemStockBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -48,13 +56,15 @@ open class AdapterFragmentStocksList(
             binding.liked.setOnClickListener {
                 listener.click(item)
                 setFavouriteImageResource(binding.liked, item.isFavourite)
-                val index = stocksData.indexOfFirst { it.id == item.id }
-                val updateStocks = stocksData[index].copy(isFavourite = !item.isFavourite)
-                list = stocksData.toMutableList()
-                list[index] = updateStocks
-                stocksData = list
+                val index = oldStocksData.indexOfFirst { it.id == item.id }
+                val updateStocks = oldStocksData[index].copy(isFavourite = !item.isFavourite)
+                newStocksData = oldStocksData.toMutableList()
+                newStocksData[index] = updateStocks
+                Log.e("Tag", "newStocksData -> $newStocksData")
+                Log.e("Tag", "oldStocksData -> $oldStocksData")
+                oldStocksData = newStocksData
+                addStocks(oldStocksData)
                 notifyDataSetChanged()
-
             }
         }
     }
@@ -69,13 +79,13 @@ open class AdapterFragmentStocksList(
         ViewItemStockBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = stocksData[position]
+        val item = oldStocksData[position]
         holder.bind(item)
     }
 
-    fun addStocks(stocks: List<StocksData>) {
-        this.stocksData = stocks
-        Log.e("Tag", "List -> $list")
+ fun addStocks(stocks: List<StocksData>) {
+        this.oldStocksData = stocks
+        Log.e("Tag", "List -> $stocks")
         notifyDataSetChanged()
     }
 

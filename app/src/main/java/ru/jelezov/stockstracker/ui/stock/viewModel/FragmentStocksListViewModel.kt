@@ -27,12 +27,6 @@ class FragmentStocksListViewModel @Inject constructor(
         }
     }
 
-    fun loadFavouritesList() {
-        viewModelScope.launch(Dispatchers.IO) {
-            stocks.postValue(repository.loadFavouritesList())
-        }
-    }
-
     fun updateFavorite(stock: StocksData) =
         viewModelScope.launch(Dispatchers.IO) { repository.updateFavorite(stock) }
 

@@ -11,6 +11,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -60,7 +61,10 @@ class FragmentSearch: Fragment(), StocksListener {
             viewModel.stocks.observe(viewLifecycleOwner, {
                 adapter.addStocks(it)
             })
-
+            val animator = itemAnimator
+            if (animator is DefaultItemAnimator) {
+                animator.supportsChangeAnimations = false
+            }
             this.adapter = adapter
         }
 

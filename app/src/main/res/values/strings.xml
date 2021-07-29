@@ -11,4 +11,5 @@
     <string name="error_network_failed">Check you network connection</string>
     <string name="stocks_text">Stocks</string>
     <string name="favourite_text">Favourite</string>
+    <string name="back">back</string>
 </resources>
