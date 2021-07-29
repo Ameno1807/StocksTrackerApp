@@ -47,10 +47,6 @@ open class AdapterFragmentStocksList(
                 binding.dayDelta.setTextColor(Color.RED)
             }
 
-            if ((adapterPosition % 2) != 0) {
-                binding.view.setBackgroundColor(Color.WHITE)
-            }
-
             setFavouriteImageResource(binding.liked, item.isFavourite)
 
             binding.liked.setOnClickListener {

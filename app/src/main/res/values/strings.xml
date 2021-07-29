@@ -12,4 +12,5 @@
     <string name="stocks_text">Stocks</string>
     <string name="favourite_text">Favourite</string>
     <string name="back">back</string>
+    <string name="liked">liked</string>
 </resources>
